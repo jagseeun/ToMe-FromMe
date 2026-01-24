@@ -1,0 +1,27 @@
+{
+  "name": "tome-fromme",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeahee2/ToMe-FromMe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeahee2/ToMe-FromMe/issues"
+  },
+  "homepage": "https://github.com/jeahee2/ToMe-FromMe#readme",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.19.2",
+    "bcrypt": "^6.0.0",
+    "express": "^5.2.1",
+    "prisma": "^6.19.2"
+  }
+}

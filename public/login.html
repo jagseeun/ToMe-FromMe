@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To.Me ; From.Me - 로그인</title>
+    
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#151f2e">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 로그인 페이지 전용 스타일 보정 (필요시 사용) */
+        html {
+            height: 100%;
+            background: linear-gradient(to bottom, #151f2e 0%, #1e2d3f 20%, #2a3a4d 40%, #3d4b5a 55%, #5a5a5a 68%, #766652 78%, #9a8568 86%, #b89a73 93%, #d4b08a 100%) no-repeat fixed;
+        }
+        body { margin: 0; background: transparent !important; }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <h1 class="title">
+            <span class="to">To.Me</span><span class="semicolon"> ; </span><span class="from">From.Me</span>
+        </h1>
+        
+        <div class="form-container">
+            <input type="text" id="userid" class="input-field" placeholder="아이디를 입력하세요" maxlength="20">
+            
+            <input type="password" id="password" class="input-field" placeholder="비밀번호를 입력하세요" maxlength="20">
+            
+            <button id="loginBtn" class="btn submit-btn">로그인</button>
+        </div>
+        
+        <a href="index.html" class="back-link">← 돌아가기</a>
+    </div>
+
+    <script>
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 4}s`;
+            starsContainer.appendChild(star);
+        }
+    </script>
+
+    <script>
+        document.getElementById("loginBtn").addEventListener("click", async () => {
+            const userid = document.getElementById("userid").value;
+            const password = document.getElementById("password").value;
+
+            if (!userid || !password) {
+                alert("아이디와 비밀번호를 입력해주세요.");
+                return;
+            }
+
+            try {
+                const response = await fetch("/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userid, password }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(`${result.name}님 환영합니다!`);
+                    // 로그인 성공 후 메인 페이지(혹은 편지함)로 이동
+                    // 지금은 일단 index.html로 보냅니다. 나중에 main.html 만드시면 바꾸세요!
+                    window.location.href = "hello.html"; 
+                } else {
+                    alert(result.message); // "비밀번호가 틀렸습니다" 등
+                }
+            } catch (err) {
+                console.error(err);
+                alert("서버 오류가 발생했습니다.");
+            }
+        });
+        
+        // 엔터키 쳤을 때 로그인 버튼 눌리게 하기 (센스!)
+        document.getElementById("password").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                document.getElementById("loginBtn").click();
+            }
+        });
+    </script>
+</body>
+</html>

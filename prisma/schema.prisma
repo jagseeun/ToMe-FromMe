@@ -1,0 +1,36 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+
+}
+
+// 1. 회원 (Member)
+model Member {
+  id       Int      @id @default(autoincrement())
+  userid   String   @unique // 아이디
+  password String
+  name     String
+  email    String?
+  
+  // 👇 핵심: "나는 여러 개의 편지를 가질 수 있다"
+  letters  Letter[] 
+}
+
+// 2. 편지 (Letter)
+model Letter {
+  id        Int      @id @default(autoincrement())
+  title     String   // 제목
+  content   String   // 내용 (줄글)
+  openDate  DateTime // 📅 개봉 예정일 (타임캡슐 핵심!)
+  createdAt DateTime @default(now()) // 작성일
+  
+  // 👇 핵심: "이 편지의 주인은 Member 테이블의 id다"
+  author    Member   @relation(fields: [authorId], references: [id])
+  authorId  Int      // 실제 DB에 저장되는 '작성자 번호'
+}
